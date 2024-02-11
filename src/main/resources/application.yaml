@@ -1,0 +1,28 @@
+server:
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+   redis:
+     host: localhost
+     port: 6379
+     list:
+        key: X
+     channel:
+        topic:
+            X: X
+            R: R
+   mail:
+       host: smtp.office365.com
+       port: 587
+       debug: false
+       properties:
+          mail:
+             smtp:
+                auth: true
+                starttls:
+                   enable: true
+                   required: true
+             transport:
+                protocol: smtp
