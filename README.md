@@ -55,3 +55,5 @@ Once you have the prerequisites installed, follow these steps:
    Replace `<jar_file_name>` with the name of the generated JAR file.
 
 4. The application should now be up and running, and you can interact with it as needed.
+
+Note: This README.md has been generated with Chatgpt. Hence, the steps mentioned here are not accurate and it is open for modification.
