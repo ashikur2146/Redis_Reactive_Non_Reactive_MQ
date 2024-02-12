@@ -11,7 +11,7 @@ package reactive.redis.broker.pubsub.x;
  * </p>
  * <p>
  * Type should be defined before pushing to the queue, which then will be read
- * and processed by the regarding operation processor on message.
+ * and processed by the regarding operation processor in the subscriber {@link RedisMessageSubscriber}.
  * </p>
  */
 enum MESSAGE_TYPE {

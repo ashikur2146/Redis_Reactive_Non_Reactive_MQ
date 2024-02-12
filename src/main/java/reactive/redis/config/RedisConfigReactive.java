@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.ReactiveRedisMessageListenerContainer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -19,7 +18,7 @@ import reactor.util.Loggers;
 
 @Configuration
 @Lazy
-public class RedisConfigReactive {
+public class RedisConfigReactive<T, R> {
 	private static final Logger LOGGER = Loggers.getLogger(RedisConfigReactive.class);
 
 	@Value("${spring.redis.host}")
@@ -37,22 +36,27 @@ public class RedisConfigReactive {
 	}
 
 	@Bean
-	public ReactiveRedisPublisher reactiveRedisPublisher() {
-		return new ReactiveRedisPublisher(this.reactiveRedisTemplate());
+	public ReactiveRedisPublisher<T, R> reactiveRedisPublisher() {
+		return new ReactiveRedisPublisher<>(this.reactiveRedisTemplate());
 	}
 
 	@Bean
-	public ReactiveRedisMessageListenerContainer reactiveRedisMessageListenerContainer(ReactiveRedisConnectionFactory reactiveRedisConnectionFactory) {
+	public ReactiveRedisMessageListenerContainer reactiveRedisMessageListenerContainer(
+			ReactiveRedisConnectionFactory reactiveRedisConnectionFactory) {
 		return new ReactiveRedisMessageListenerContainer(reactiveRedisConnectionFactory);
 	}
 
 	@Bean
-	public ReactiveRedisTemplate<String, String> reactiveRedisTemplate() {
-		StringRedisSerializer keySerializer = new StringRedisSerializer();
-		Jackson2JsonRedisSerializer<String> valueSerializer = new Jackson2JsonRedisSerializer<>(String.class);
-		RedisSerializationContext.RedisSerializationContextBuilder<String, String> builder = RedisSerializationContext
-				.newSerializationContext(keySerializer);
-		RedisSerializationContext<String, String> context = builder.value(valueSerializer).build();
-		return new ReactiveRedisTemplate<String, String>(this.reactiveRedisConnectionFactory(), context);
+	public ReactiveRedisTemplate<T, R> reactiveRedisTemplate() {
+		return new ReactiveRedisTemplate<>(this.reactiveRedisConnectionFactory(), this.redisSerializationContext());
 	}
+
+	@Bean
+	public RedisSerializationContext<T, R> redisSerializationContext() {
+		StringRedisSerializer keySerializer = new StringRedisSerializer();
+		RedisSerializationContext.RedisSerializationContextBuilder<T, R> builder = RedisSerializationContext
+				.newSerializationContext(keySerializer);
+		return builder.build();
+	}
+
 }

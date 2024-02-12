@@ -1,11 +1,9 @@
 package reactive.redis.borker.pubsub.r;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.connection.ReactiveSubscription.Message;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.ReactiveRedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
-import reactor.core.publisher.Flux;
 import reactor.util.Logger;
 import reactor.util.Loggers;
 
@@ -27,7 +25,7 @@ public class ReactiveRedisSubscriber {
         LOGGER.info("XX subscription channel: " + channel);
         reactiveRedisMessageListenerContainer.receive(ChannelTopic.of(channel))
                 .subscribe(message -> {
-                    LOGGER.info("** Received message: " + message.getMessage());
+                    LOGGER.info("** Received message: " + message);
                 });
     }
 }

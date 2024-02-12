@@ -54,7 +54,7 @@ public class RedisMessageSubscriber implements MessageListener {
 	}
 
 	private static Optional<EmailInfo> stringDeserialization(String serializedString) {
-		if (serializedString == null || serializedString.isEmpty()) {
+		if (serializedString == null || serializedString.isEmpty() || serializedString.isBlank()) {
 			return Optional.empty();
 		}
 		ObjectMapper mapper = new ObjectMapper();
